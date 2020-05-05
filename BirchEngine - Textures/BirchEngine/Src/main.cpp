@@ -1,0 +1,35 @@
+#include "Game.h"
+
+Game *game = nullptr;
+
+int main(int argc, char *argv[])
+{
+
+	const int FPS = 60;
+	const int frameDelay = 1000 / FPS; //mas time btw frames
+
+	Uint32 frameStart; //massive integer
+	int frameTime;
+
+	game = new Game();
+	game->init("GameWindow", 512, 512, false);
+
+	while (game->running())
+	{
+		frameStart = SDL_GetTicks();
+		
+		game->handleEvents();
+		game->update();
+		game->render();
+
+		frameTime = SDL_GetTicks() - frameStart; 
+
+		//Para que no salte en pantalla, y se mueva pixel x pixel como debe ser
+		if (frameDelay > frameTime) {
+			SDL_Delay(frameDelay - frameTime);
+		}
+	}
+
+	game->clean();
+	return 0;
+}
